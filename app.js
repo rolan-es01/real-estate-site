@@ -267,9 +267,28 @@ if (whatsappBtn) {
     };
 }
 
-function toggleDashboard() {
+async function toggleDashboard() {
     const dropdown = document.getElementById('dashboard-dropdown');
     dropdown.classList.toggle('active');
+
+    if (dropdown.classList.contains('active')) {
+        // Get the logged-in user from localStorage
+        const loggedUser = localStorage.getItem('username');
+        
+        if (loggedUser) {
+            try {
+                // Pass the username to the PHP file via URL parameter
+                const response = await fetch(`get_user_stats.php?user=${encodeURIComponent(loggedUser)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('stat-count').innerText = data.inquiry_count;
+                }
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            }
+        }
+    }
 }
 
 // Close dropdown when clicking outside
