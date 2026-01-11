@@ -272,20 +272,43 @@ async function toggleDashboard() {
     dropdown.classList.toggle('active');
 
     if (dropdown.classList.contains('active')) {
-        // Get the logged-in user from localStorage
         const loggedUser = localStorage.getItem('username');
+        const historyList = document.getElementById('message-history-list');
         
         if (loggedUser) {
             try {
-                // Pass the username to the PHP file via URL parameter
-                const response = await fetch(`get_user_stats.php?user=${encodeURIComponent(loggedUser)}`);
-                const data = await response.json();
+                const statsRes = await fetch(`get_user_stats.php?user=${encodeURIComponent(loggedUser)}`);
+                const statsData = await statsRes.json();
+                if (statsData.success) document.getElementById('stat-count').innerText = statsData.inquiry_count;
 
-                if (data.success) {
-                    document.getElementById('stat-count').innerText = data.inquiry_count;
+                // 2. Fetch History
+                const historyRes = await fetch(`get_message_history.php?user=${encodeURIComponent(loggedUser)}`);
+                const historyData = await historyRes.json();
+
+                if (historyData.success) {
+                    historyList.innerHTML = ''; 
+                    
+                    if (historyData.history.length === 0) {
+                        historyList.innerHTML = '<li>No inquiries yet.</li>';
+                    } else {
+                        historyData.history.forEach(item => {
+                            // Inside your historyData.history.forEach loop:
+                            const li = document.createElement('li');
+                            li.className = "history-item";
+                            li.innerHTML = `
+    <div class="history-info">
+        <a href="#">🏠 ${item.property_title} <br><small>${item.created_at}</small></a>
+    </div>
+    <button class="delete-btn" onclick="deleteInquiry('${item.property_title}')">
+        <i class="fas fa-trash">Delete</i>
+    </button>
+`;
+                            historyList.appendChild(li);
+                        });
+                    }
                 }
             } catch (error) {
-                console.error("Error fetching stats:", error);
+                console.error("Error fetching dashboard data:", error);
             }
         }
     }
@@ -300,3 +323,19 @@ window.addEventListener('click', function(e) {
         dropdown.classList.remove('active');
     }
 });
+
+async function deleteInquiry(houseTitle) {
+    const loggedUser = localStorage.getItem('username');
+    if (!confirm(`Are you sure you want to remove your inquiry for ${houseTitle}?`)) return;
+
+    const response = await fetch('delete_inquiry.php', {
+        method: 'POST',
+        body: JSON.stringify({ username: loggedUser, property_title: houseTitle })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        toggleDashboard(); // Close and reopen to refresh the list
+        toggleDashboard(); 
+    }
+}
