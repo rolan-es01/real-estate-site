@@ -258,9 +258,10 @@ const msgBtn = document.getElementById('msg-btn').addEventListener('click', () =
 const whatsappBtn = document.getElementById('whatsapp-btn');
 if (whatsappBtn) {
     whatsappBtn.onclick = function() {
-        const houseTitle = document.getElementById('modal-house-title').innerText.replace("Inquiry: ", "");
+       const houseNameInput = document.getElementById('form-house-title');
+       const houseName = houseNameInput ? houseNameInput : "your property";
 
-        const message = `Hello! I'm interested in the ${houseTitle}. Can I get more details?`;
+        const message = `Hello! I'm interested in ${houseName}. Can I get more details?`;
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/+2348065879200?text=${encodedMessage}`, '_blank');
     };
