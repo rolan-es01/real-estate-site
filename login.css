@@ -1,0 +1,81 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI',sans-serif;
+}
+
+.login-container{
+    display: flex;
+    height: 100vh;
+}
+
+.visual-side{
+    flex: 1.2;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),url('nastuh-abootalebi-eHD8Y1Znfpk-unsplash.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.form-side{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.login-box{
+    width: 100%;
+    max-width: 380px;
+    padding: 20px;
+}
+
+h2{
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.subtitle{
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.input-group{
+    margin-bottom: 20px;
+}
+
+.input-group label{
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.input-group input{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+}
+
+.btn-primary{
+    width: 100%;
+    padding: 14px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover{
+    background-color: #e07b00;
+}

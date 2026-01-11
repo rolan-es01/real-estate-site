@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <h2 class="heading">Granville Real Estate</h2>
+
+        <div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#">Testimonial</a></li>
+                    <li><a href="#">Properties</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="user-profile-header">
+            <div class="user-avatar">
+                <img src="user-line.png" alt="profile png" id="user-icon-image">
+            </div>
+            <span id="display-name"></span>
+            <button onclick="logout()" class="btn-logout">Logout</button>
+        </div>
+
+    </header>
+
+    <div class="hero-section">
+        <img src="mike-hindle-a8Slhd4Kvxw-unsplash.jpg" alt="picture of a house for rent" class="background-image">
+        <div class="hero-content">
+            <h3>Welcome to Granville Real Estate</h3>
+            <h1>Invest in your dream home today</h1>
+
+
+            <div class="button-container">
+                <button class="primary-btn">View Property</button>
+                <button class="secondary-btn">Contact Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!----property type section----->
+    <section class="property-type-section">
+
+        <div>
+            <p>PROPERTY TYPES</p>
+        </div>
+        <h1>Explore Apartment Types</h1>
+
+        <div class="card-container">
+
+            <div class="card" onclick="filterType('House')">
+                <svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M21 20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9.48907C3 9.18048 3.14247 8.88917 3.38606 8.69972L11.3861 2.47749C11.7472 2.19663 12.2528 2.19663 12.6139 2.47749L20.6139 8.69972C20.8575 8.88917 21 9.18048 21 9.48907V20ZM19 19V9.97815L12 4.53371L5 9.97815V19H19Z">
+                    </path>
+                </svg>
+                <div class="card-text-container">
+                    <h3>Houses</h3>
+                    <p>22 properties</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="filterType('Apartment')">
+                <svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M21 20H23V22H1V20H3V3C3 2.44772 3.44772 2 4 2H20C20.5523 2 21 2.44772 21 3V20ZM19 20V4H5V20H19ZM8 11H11V13H8V11ZM8 7H11V9H8V7ZM8 15H11V17H8V15ZM13 15H16V17H13V15ZM13 11H16V13H13V11ZM13 7H16V9H13V7Z">
+
+                    </path>
+                </svg>
+                <div class="card-text-container">
+                    <h3>Apartments</h3>
+                    <p>18 properties</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="filterType('Office')">
+                <svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 19H14V6.00003L20.3939 8.74028C20.7616 8.89786 21 9.2594 21 9.65943V19H23V21H1V19H3V5.6499C3 5.25472 3.23273 4.89659 3.59386 4.73609L11.2969 1.31251C11.5493 1.20035 11.8448 1.314 11.9569 1.56634C11.9853 1.63027 12 1.69945 12 1.76941V19Z">
+
+                    </path>
+                </svg>
+                <div class="card-text-container">
+                    <h3>Offices</h3>
+                    <p>13 properties</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="filterType('Town Home')">
+                <svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M21 21H3C2.44772 21 2 20.5523 2 20V12.4868C2 12.1978 2.12501 11.9229 2.34282 11.733L6 8.54435V4C6 3.44772 6.44772 3 7 3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21ZM9 19H12V12.9416L8 9.45402L4 12.9416V19H7V15H9V19ZM14 19H20V5H8V7.12729C8.23444 7.12729 8.46888 7.20938 8.65718 7.37355L13.6572 11.733C13.875 11.9229 14 12.1978 14 12.4868V19ZM16 11H18V13H16V11ZM16 15H18V17H16V15ZM16 7H18V9H16V7ZM12 7H14V9H12V7Z">
+
+                    </path>
+                </svg>
+                <div class="card-text-container">
+                    <h3>Town Homes</h3>
+                    <p>20 properties</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!----property section----->
+    <section class="properties-section">
+        <h4>Properties</h4>
+    
+        <h2>Featured Properties</h2>
+        <div class="carousel-wrapper">
+            <button class="scroll-btn left" onclick="scrollGrid(-1)"
+                style="position: absolute; left: 0px; z-index: 10;">&#10094;</button>
+
+            <article id="listings-container" class="property-container">
+                <!------Card-one------>
+                <div class="property-card">
+    
+                    <div class="image-container">
+                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <span class="rent">Rent</span>
+                    </div>
+    
+                    <div class="property-heading-container">
+                        <h4 class="property-title">Luxury Family Home</h4>
+                        <address class="property-address">New York City, CA, USA</address>
+                    </div>
+    
+                    <div class="property-specs">
+                        <div>6 Bathrooms</div>
+                        <div>6 Bedrooms</div>
+                        <div>720 sq feet</div>
+                        <div>1 garage</div>
+                    </div>
+    
+                    <hr>
+                    <footer>
+                        <div class="property-footer">
+                            <p>$150,000</p>
+                            <button class="book-button">View property</button>
+                        </div>
+                    </footer>
+                </div>
+                <!-----card-two------>
+                <div class="property-card">
+    
+                    <div class="image-container">
+                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <span class="rent">Rent</span>
+                    </div>
+    
+                    <div class="property-heading-container">
+                        <h4 class="property-title">Luxury Family Home</h4>
+                        <address class="property-address">New York City, CA, USA</address>
+                    </div>
+    
+                    <div class="property-specs">
+                        <div>6 Bathrooms</div>
+                        <div>6 Bedrooms</div>
+                        <div>720 sq feet</div>
+                        <div>1 garage</div>
+                    </div>
+    
+                    <hr>
+                    <footer>
+                        <div class="property-footer">
+                            <p>$150,000</p>
+                            <button class="book-button">View property</button>
+                        </div>
+                    </footer>
+                </div>
+                <!----card-three----->
+                <div class="property-card">
+    
+                    <div class="image-container">
+                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <span class="rent">Rent</span>
+                    </div>
+    
+                    <div class="property-heading-container">
+                        <h4 class="property-title">Luxury Family Home</h4>
+                        <address class="property-address">New York City, CA, USA</address>
+                    </div>
+    
+                    <div class="property-specs">
+                        <div>6 Bathrooms</div>
+                        <div>6 Bedrooms</div>
+                        <div>720 sq feet</div>
+                        <div>1 garage</div>
+                    </div>
+    
+                    <hr>
+                    <footer>
+                        <div class="property-footer">
+                            <p>$150,000</p>
+                            <button class="book-button">View property</button>
+                        </div>
+                    </footer>
+                </div>
+                <!---card-four------>
+                <div class="property-card">
+    
+                    <div class="image-container">
+                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <span class="rent">Rent</span>
+                    </div>
+    
+                    <div class="property-heading-container">
+                        <h4 class="property-title">Luxury Family Home</h4>
+                        <address class="property-address">New York City, CA, USA</address>
+                    </div>
+    
+                    <div class="property-specs">
+                        <div>6 Bathrooms</div>
+                        <div>6 Bedrooms</div>
+                        <div>720 sq feet</div>
+                        <div>1 garage</div>
+                    </div>
+    
+                    <hr>
+                    <footer>
+                        <div class="property-footer">
+                            <p>$150,000</p>
+                            <button class="book-button">View property</button>
+                        </div>
+                    </footer>
+    
+                </div>
+            </article>
+    
+            <button class="scroll-btn right" onclick="scrollGrid(1)"
+                style="position: absolute; right: 0px; z-index: 10;">&#10095;</button>
+        </div>
+    </section>
+
+    <!----about-us section----->
+    <section id="about" class="about-us-section">
+
+        <div class="about-image-container">
+            <img src="nastuh-abootalebi-eHD8Y1Znfpk-unsplash.jpg" alt="image of an interior" class="about-image">
+        </div>
+
+        <div class="about-description-container">
+
+
+            <div class="about-description">
+                <span class="about-us-span">Our Services</span>
+                <h1>The Leading Real Estate Rental Marketplace</h1>
+                <p>
+                    Over 39,000 people work for us in over 70 countries all over the world.<br>This breadth
+                    of global coverage combined with specialist services make us a go to choice
+                </p>
+            </div>
+
+            <div class="service-lists">
+                <div>Smart Home Design</div>
+                <div>Beautiful Scenery</div>
+                <div>Exceptional Lifestyle</div>
+                <div>Complete 24/7 Security</div>
+            </div>
+
+            <div class="motto-section">
+                <q>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br>
+                    Quos modi nam odio laborum, ad, voluptatem corrupti ut eum<br>
+                    impedit veniam voluptatum consequatur facere fugit natus!
+                    <br> Recusandae amet expedita deleniti ex?</q>
+            </div>
+        </div>
+    </section>
+
+    <!----- contact-us section-->
+    <section class="contact-us">
+        <div class="container">
+
+            <div class="contact-content">
+                <span class="about-us-span">Contact Us</span>
+                <h2 class="title">Easy to contact us<span>.</span></h2>
+                <p class="description">
+                    Is there a problem finding your dream home? Need a guide in buying your first home? or need a
+                    consultation on residential issues? just contact us.
+                </p>
+
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="card-top">
+                            <div class="icon">📞</div>
+                            <div class="details">
+                                <h3>Call</h3>
+                                <p>080 6587 9200</p>
+                            </div>
+                        </div>
+                        <button class="card-button" id="call-btn">Call Now</button>
+                    </div>
+                   
+                    <div class="contact-card">
+                        <div class="card-top">
+                            <div class="icon"><img src=envelope.png alt="image of an envelope" ></div>
+                            <div class="details">
+                                <h3>Message</h3>
+                                <p>080 6587 9200</p>
+                            </div>
+                        </div>
+                        <button class="card-button" id="msg-btn">Message Now</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="card-top">
+                            <div class="icon">💬</div>
+                            <div class="details">
+                                <h3>Chat</h3>
+                                <p>080 6587 9200</p>
+                            </div>
+                        </div>
+                        <button class="card-button" id="whatsapp-btn">Chat Now</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="card-top">
+                            <div class="icon"><img src="video-camera-alt.png" alt="png of video camera"></div>
+                            <div class="details">
+                                <h3>Video Call</h3>
+                                <p>080 6587 9200</p>
+                            </div>
+                        </div>
+                        <button class="card-button" id="video-call-btn">Video Call Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-section">
+                <div class="arch-frame">
+                    <img src="HQ.jpg" alt="Modern House">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span onclick="closeModal()" class="close-modal-span">&times;</span>
+        <h2 id="modal-house-title">Contact Agent</h2>
+        <p>Interested in this property, <span id="modal-user-name"></span></p>
+
+
+        <form id="contactForm">
+            <input type="hidden" id="form-house-title">
+            <textarea id="user-message" placeholder="I am interested in thhis property. Please contact me..." required>
+
+            </textarea>
+            <button type="submit" class="btn-orange">Send Message</button>
+        </form>
+    </div>
+</div>
+
+    <script src="app.js"></script>
+</body>
+
+
+</html>
