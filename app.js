@@ -266,3 +266,18 @@ if (whatsappBtn) {
         window.open(`https://wa.me/+2348065879200?text=${encodedMessage}`, '_blank');
     };
 }
+
+function toggleDashboard() {
+    const dropdown = document.getElementById('dashboard-dropdown');
+    dropdown.classList.toggle('active');
+}
+
+// Close dropdown when clicking outside
+window.addEventListener('click', function(e) {
+    const container = document.querySelector('.profile-nav-container');
+    const dropdown = document.getElementById('dashboard-dropdown');
+    
+    if (container && !container.contains(e.target)) {
+        dropdown.classList.remove('active');
+    }
+});

@@ -24,13 +24,34 @@
             </nav>
         </div>
 
-        <div id="user-profile-header">
+    <div class="profile-nav-container">
+        <div id="user-profile-header" onclick="toggleDashboard()">
             <div class="user-avatar">
                 <img src="user-line.png" alt="profile png" id="user-icon-image">
             </div>
             <span id="display-name"></span>
-            <button onclick="logout()" class="btn-logout">Logout</button>
         </div>
+    
+        <div id="dashboard-dropdown" class="dashboard-menu">
+            <div class="menu-header">
+                <h4>Account Overview</h4>
+            </div>
+            <div class="menu-stats">
+                <div class="stat-item">
+                    <span id="stat-count">0</span>
+                    <small>Inquiries</small>
+                </div>
+            </div>
+            <ul class="menu-links">
+                <li><a href="#"><i class="fas fa-history"></i> My Message History</a></li>
+                <li><a href="#"><i class="fas fa-heart"></i> Saved Properties</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+            <div class="menu-footer">
+                <button onclick="logout()" class="btn-logout-dropdown">Logout</button>
+            </div>
+        </div>
+    </div>
 
     </header>
 

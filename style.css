@@ -21,15 +21,91 @@ header{
    
 }
 
-#display-name{
-    font-weight: bold;
-    color: #333;
+.profile-nav-container {
+    position: relative; /* Context for the absolute dropdown */
+    display: inline-block;
 }
 
 #user-profile-header {
-    display: none;
+    cursor: pointer;
+    display: flex;
     align-items: center;
     gap: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: background 0.3s;
+}
+
+#user-profile-header:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-menu {
+    position: absolute;
+    top: 100%; /* Sits right under the header */
+    right: 0;
+    width: 250px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: none; /* Hidden by default */
+    z-index: 1000;
+    margin-top: 10px;
+    color: #333;
+    overflow: hidden;
+}
+
+.dashboard-menu.active {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+.menu-header {
+    background: #1a1a1a;
+    padding: 15px;
+    color: #b89447; /* Your gold accent */
+    text-align: center;
+}
+
+.menu-stats {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
+}
+
+.stat-item { text-align: center; }
+.stat-item span { display: block; font-size: 1.5rem; font-weight: bold; color: #1a1a1a; }
+
+.menu-links { list-style: none; padding: 10px 0; }
+.menu-links li a {
+    padding: 12px 20px;
+    display: block;
+    text-decoration: none;
+    color: #444;
+    transition: 0.2s;
+}
+
+.menu-links li a:hover { background: #f9f9f9; color: #b89447; }
+
+.btn-logout-dropdown {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #fdfdfd;
+    color: #e74c3c;
+    cursor: pointer;
+    border-top: 1px solid #eee;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#display-name{
+    font-weight: bold;
+    color: #333;
 }
 
 .user-avatar{
