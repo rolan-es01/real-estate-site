@@ -86,6 +86,18 @@ header{
     transition: 0.2s;
 }
 
+#message-history-list {
+    max-height: 200px;
+    overflow-y: auto; /* Add scroll if they have many inquiries */
+}
+
+#message-history-list li small {
+    color: #888;
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 2px;
+}
+
 .menu-links li a:hover { background: #f9f9f9; color: #b89447; }
 
 .btn-logout-dropdown {
@@ -636,4 +648,32 @@ hr{
     transform: translateY(-50%) scale(1.1);
 }
 
+.card-buttons{
+    display: flex;
+}
 
+.collapsible-content {
+    display: none; 
+    padding-left: 20px;
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #f9f9f9;
+}
+
+.collapsible-content.active {
+    display: block; 
+}
+
+.menu-item-toggle {
+    cursor: pointer;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-item-toggle:hover {
+    background-color: #eee;
+}

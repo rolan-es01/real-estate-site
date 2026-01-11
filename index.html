@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
@@ -42,10 +43,17 @@
                     <small>Inquiries</small>
                 </div>
             </div>
-            <ul class="menu-links" id="message-history-list">
-                <li><a href="#"><i class="fas fa-history"></i> My Message History</a></li>
-                <li><a href="#"><i class="fas fa-heart"></i> Saved Properties</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            <div class="menu-item-toggle" onclick="toggleSection('history-section')">
+                <i class="fas fa-history"></i> My Message History 
+            </div>
+            <ul id="message-history-list" class="collapsible-content">
+                <li>Loading history...</li>
+            </ul>
+            <div class="menu-item-toggle" onclick="toggleSection('saved-section')">
+                <i class="fas fa-heart"></i> Saved Properties 
+            </div>
+            <ul id="favorites-list" class="collapsible-content">
+                <li>Loading favorites...</li>
             </ul>
             <div class="menu-footer">
                 <button onclick="logout()" class="btn-logout-dropdown">Logout</button>

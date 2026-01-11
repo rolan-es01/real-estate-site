@@ -100,7 +100,12 @@ async function fetchListings() {
                     ${house.beds} Bed | ${house.baths} Bath | ${house.sqft} sqft
                 </div>
                 <p style="font-size: 1.2rem; font-weight: bold; color: #ff8c00; margin-bottom: 15px;">$${Number(house.price).toLocaleString()}</p>
+                <div class="card-buttons">
                 <button class="btn-orange" onclick="openContactModal('${house.title}')" style="width: 100%; padding: 10px; cursor: pointer;">Contact Now</button>
+                <button class="fav-btn" onclick="toggleFavorite('${house.title}', '${house.image}', this)">
+    <i class="far fa-heart"></i>
+</button>
+            </button>
             </div>
         </div>
     `;
@@ -178,7 +183,6 @@ if (contactForm) {
         formData.append('message', messageText);
 
         try {
-            // 3. Send to PHP
             const response = await fetch('save_message.php', {
                 method: 'POST',
                 body: formData
@@ -189,7 +193,7 @@ if (contactForm) {
             if (result.includes("Success")) {
                 alert("Message sent to the owner!");
                 document.getElementById('contactModal').style.display = "none";
-                contactForm.reset(); // Clears the text area
+                contactForm.reset(); 
             }
         } catch (error) {
             console.error("Submission Error:", error);
@@ -267,6 +271,7 @@ if (whatsappBtn) {
     };
 }
 
+//user dashboard section
 async function toggleDashboard() {
     const dropdown = document.getElementById('dashboard-dropdown');
     dropdown.classList.toggle('active');
@@ -292,24 +297,50 @@ async function toggleDashboard() {
                         historyList.innerHTML = '<li>No inquiries yet.</li>';
                     } else {
                         historyData.history.forEach(item => {
-                            // Inside your historyData.history.forEach loop:
                             const li = document.createElement('li');
                             li.className = "history-item";
+                             // Inside your forEach loop for inquiry history:
                             li.innerHTML = `
-    <div class="history-info">
-        <a href="#">🏠 ${item.property_title} <br><small>${item.created_at}</small></a>
-    </div>
-    <button class="delete-btn" onclick="deleteInquiry('${item.property_title}')">
-        <i class="fas fa-trash">Delete</i>
-    </button>
-`;
+                                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                    <a href="#">🏠 ${item.property_title} <br><small>${item.created_at}</small></a>
+                                    <button class="delete-btn" onclick="deleteInquiry('${item.property_title}', this)" style="border:none; background:none; cursor:pointer;">
+                                        <i class="fas fa-trash-can" style="color: #e74c3c;"></i>
+                                    </button>
+                                </div>
+                            `;
                             historyList.appendChild(li);
+                        });
+                    }
+                }
+                // 3. Fetch Favorites (Inject this right after your history loop)
+                const favRes = await fetch(`get_favorites.php?user=${encodeURIComponent(loggedUser)}`);
+                const favData = await favRes.json();
+                const favList = document.getElementById('favorites-list');
+
+                if (favData.success) {
+                    favList.innerHTML = ''; // This clears the "Loading favorites..." text
+                    if (favData.favorites.length === 0) {
+                        favList.innerHTML = '<li>No saved homes yet.</li>';
+                    } else {
+                        favData.favorites.forEach(house => {
+                            const li = document.createElement('li');
+                            li.className = "fav-item";
+                            li.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <a href="#">❤️ ${house.property_title}</a>
+                            <button class="delete-btn" onclick="toggleFavorite('${house.property_title}', '', this)">
+                                <i class="fas fa-trash-can" style="color: #e74c3c;"></i>
+                            </button>
+                        </div>`;
+                            favList.appendChild(li);
                         });
                     }
                 }
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);
             }
+
+            
         }
     }
 }
@@ -335,7 +366,83 @@ async function deleteInquiry(houseTitle) {
     
     const result = await response.json();
     if (result.success) {
-        toggleDashboard(); // Close and reopen to refresh the list
         toggleDashboard(); 
+        toggleDashboard(); 
+    }
+}
+
+async function toggleFavorite(houseTitle, houseImage, buttonElement) {
+    const loggedUser = localStorage.getItem('username');
+    
+    if (!loggedUser) {
+        alert("Please log in to save favorites!");
+        return;
+    }
+
+    try {
+        const response = await fetch('save_favorite.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: loggedUser,
+                property_title: houseTitle,
+                property_image: houseImage
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            // Toggle the look of the heart icon
+            const icon = buttonElement.querySelector('i');
+            if (data.status === 'added') {
+                icon.classList.replace('far', 'fas'); // Change to solid heart
+                buttonElement.classList.add('favorited');
+            } else {
+                icon.classList.replace('fas', 'far'); // Change back to outline
+                buttonElement.classList.remove('favorited');
+            }
+        }
+    } catch (error) {
+        console.error("Error saving favorite:", error);
+    }
+}
+
+async function deleteInquiry(houseTitle, btnElement) {
+    const loggedUser = localStorage.getItem('username');
+    if (!confirm(`Delete inquiry for ${houseTitle}?`)) return;
+
+    try {
+        const response = await fetch('delete_message.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: loggedUser, property_title: houseTitle })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            // Remove the item from the UI immediately
+            btnElement.closest('li').remove();
+            // Refresh the inquiry count
+            updateInquiryCount(loggedUser);
+        }
+    } catch (error) {
+        console.error("Delete failed:", error);
+    }
+}
+
+function toggleSection(sectionId) {
+    // Find the lists
+    const historyList = document.getElementById('message-history-list');
+    const favoritesList = document.getElementById('favorites-list');
+
+    if (sectionId === 'history-section') {
+        historyList.classList.toggle('active');
+        // Optional: Close favorites when history opens
+        favoritesList.classList.remove('active'); 
+    } else {
+        favoritesList.classList.toggle('active');
+        // Optional: Close history when favorites opens
+        historyList.classList.remove('active');
     }
 }
