@@ -60,6 +60,6 @@ $result = $conn->query($sql);
     <?php endif; ?>
 
     <br>
-    <a href="index.html">Back to Site</a>
+    <a href="../index.html">Back to Site</a>
 </body>
 </html>
