@@ -19,7 +19,7 @@ async function loginUser() {
         };
 
         try {
-            const response = await fetch('login_process.php', {
+            const response = await fetch('backend/login_process.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(loginData) 
@@ -44,9 +44,9 @@ async function loginUser() {
 
 //registering user
 async function registerUser() {
-    const user = document.getElementById('regUsername').value;
-    const email = document.getElementById('regEmail').value;
-    const pass = document.getElementById('regPassword').value;
+    const user = document.getElementById('reg-username').value;
+    const email = document.getElementById('reg-email').value;
+    const pass = document.getElementById('reg-password').value;
     const messageDisplay = document.getElementById('errorMessage');
 
     if (!user || !email || !pass) {
@@ -58,7 +58,7 @@ async function registerUser() {
         email: email, password: pass};
 
         try {
-            const response = await fetch('register_process.php', {
+            const response = await fetch('backend/register_process.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(regData)
@@ -82,7 +82,7 @@ async function fetchListings() {
     if (!container) return;
 
     try {
-        const response = await fetch('get_listings.php');
+        const response = await fetch('backend/get_listings.php');
         const listings = await response.json();
 
         container.innerHTML = ''; // Clear static cards
@@ -92,7 +92,7 @@ async function fetchListings() {
 
     container.innerHTML += `
         <div class="house-card" data-type="${house.type || 'house'}" style="display: flex; flex-direction: column; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff;">
-            <img src="${house.image_url}" alt="${house.title}" class="house-img" style="width: 100%; height: 200px; object-fit: cover;">
+            <img src="assets/images/${house.image_url}" alt="${house.title}" class="house-img" style="width: 100%; height: 200px; object-fit: cover;">
             <div class="info" style="padding: 15px; display: block;">
                 <h3 style="margin: 0 0 5px 0; color: #333;">${house.title}</h3>
                 <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">${house.location}</p>
@@ -102,7 +102,7 @@ async function fetchListings() {
                 <p style="font-size: 1.2rem; font-weight: bold; color: #ff8c00; margin-bottom: 15px;">$${Number(house.price).toLocaleString()}</p>
                 <div class="card-buttons">
                 <button class="btn-orange" onclick="openContactModal('${house.title}')" style="width: 100%; padding: 10px; cursor: pointer;">Contact Now</button>
-                <button class="fav-btn" onclick="toggleFavorite('${house.title}', '${house.image}', this)">
+                <button class="fav-btn" onclick="toggleFavorite('${house.title}', 'assets/images/${house.image}', this)">
     <i class="far fa-heart"></i>
 </button>
             </button>
@@ -183,7 +183,7 @@ if (contactForm) {
         formData.append('message', messageText);
 
         try {
-            const response = await fetch('save_message.php', {
+            const response = await fetch('backend/save_message.php', {
                 method: 'POST',
                 body: formData
             });
@@ -235,20 +235,21 @@ function scrollGrid(direction) {
 }
 
 const container = document.getElementById('listings-container');
-container.addEventListener('scroll', () => {
-    const leftBtn = document.querySelector('.scroll-btn.left');
-    const rightBtn = document.querySelector('.scroll-btn.right');
-    
-    // Hide left button if at the start
-    leftBtn.style.opacity = container.scrollLeft === 0 ? "0" : "1";
-    
-    // Hide right button if at the very end
-    if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 1) {
-        rightBtn.style.opacity = "0";
-    } else {
-        rightBtn.style.opacity = "1";
-    }
-});
+if (container) { 
+    container.addEventListener('scroll', () => {
+        const leftBtn = document.querySelector('.scroll-btn.left');
+        const rightBtn = document.querySelector('.scroll-btn.right');
+
+        // Your existing opacity logic here...
+        leftBtn.style.opacity = container.scrollLeft === 0 ? "0" : "1";
+
+        if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 1) {
+            rightBtn.style.opacity = "0";
+        } else {
+            rightBtn.style.opacity = "1";
+        }
+    });
+}
 
 // contact us section buttons
 const callBtn = document.getElementById('call-btn').addEventListener('click', () => {
@@ -282,12 +283,12 @@ async function toggleDashboard() {
         
         if (loggedUser) {
             try {
-                const statsRes = await fetch(`get_user_stats.php?user=${encodeURIComponent(loggedUser)}`);
+                const statsRes = await fetch(`backend/get_user_stats.php?user=${encodeURIComponent(loggedUser)}`);
                 const statsData = await statsRes.json();
                 if (statsData.success) document.getElementById('stat-count').innerText = statsData.inquiry_count;
 
                 // 2. Fetch History
-                const historyRes = await fetch(`get_message_history.php?user=${encodeURIComponent(loggedUser)}`);
+                const historyRes = await fetch(`backend/get_message_history.php?user=${encodeURIComponent(loggedUser)}`);
                 const historyData = await historyRes.json();
 
                 if (historyData.success) {
@@ -313,7 +314,7 @@ async function toggleDashboard() {
                     }
                 }
                 // 3. Fetch Favorites (Inject this right after your history loop)
-                const favRes = await fetch(`get_favorites.php?user=${encodeURIComponent(loggedUser)}`);
+                const favRes = await fetch(`backend/get_favorites.php?user=${encodeURIComponent(loggedUser)}`);
                 const favData = await favRes.json();
                 const favList = document.getElementById('favorites-list');
 
@@ -380,7 +381,7 @@ async function toggleFavorite(houseTitle, houseImage, buttonElement) {
     }
 
     try {
-        const response = await fetch('save_favorite.php', {
+        const response = await fetch('backend/save_favorite.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -413,7 +414,7 @@ async function deleteInquiry(houseTitle, btnElement) {
     if (!confirm(`Delete inquiry for ${houseTitle}?`)) return;
 
     try {
-        const response = await fetch('delete_message.php', {
+        const response = await fetch('backend/delete_message.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: loggedUser, property_title: houseTitle })
