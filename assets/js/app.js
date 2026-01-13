@@ -3,26 +3,26 @@ async function loginUser() {
     const passField = document.getElementById('password').value;
     const messageDisplay = document.getElementById('errorMessage');
 
-    if (!userField  || !passField) {
-           console.error("Input fields missing in HTML");
-            return;
-        }
+    if (!userField || !passField) {
+        console.error("Input fields missing in HTML");
+        return;
+    }
 
-        const showMessage = (msg) => {
-            if(messageDisplay)messageDisplay.innerText = msg;
-            else alert(msg);
-        };
+    const showMessage = (msg) => {
+        if (messageDisplay) messageDisplay.innerText = msg;
+        else alert(msg);
+    };
 
-        const loginData = {
-            username: userField,
-            password: passField
-        };
+    const loginData = {
+        username: userField,
+        password: passField
+    };
 
-        try {
-            const response = await fetch('backend/login_process.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(loginData) 
+    try {
+        const response = await fetch('backend/login_process.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(loginData)
         });
 
         const result = await response.json();
@@ -34,11 +34,11 @@ async function loginUser() {
         } else {
             messageDisplay.innerText = result.message;
         }
-        } catch (error) {
-            console.error("Error:", error);
-            messageDisplay.innerText = "Connection error. Is XAMPP running?";
-        }
-    
+    } catch (error) {
+        console.error("Error:", error);
+        messageDisplay.innerText = "Connection error. Is XAMPP running?";
+    }
+
 }
 
 
@@ -54,26 +54,28 @@ async function registerUser() {
         return;
     }
 
-    const regData = {username: user, 
-        email: email, password: pass};
+    const regData = {
+        username: user,
+        email: email, password: pass
+    };
 
-        try {
-            const response = await fetch('backend/register_process.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(regData)
-            }); 
+    try {
+        const response = await fetch('backend/register_process.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(regData)
+        });
 
-            const result = await response.json();
-            if (result.status === "success") {
-                alert("Account created successfully! You can now login");
-                window.location.href = "login.html";
-            } else {
-                alert("Error: " + result.message);
-            }
-        } catch (error) {
-            console.error("Registration Error:", error);
+        const result = await response.json();
+        if (result.status === "success") {
+            alert("Account created successfully! You can now login");
+            window.location.href = "login.html";
+        } else {
+            alert("Error: " + result.message);
         }
+    } catch (error) {
+        console.error("Registration Error:", error);
+    }
 }
 
 // 1. Fetch Houses from DB
@@ -87,10 +89,10 @@ async function fetchListings() {
 
         container.innerHTML = ''; // Clear static cards
 
-      listings.forEach(house => {
-    const propertyType = house.type || 'House'; 
+        listings.forEach(house => {
+            const propertyType = house.type || 'House';
 
-    container.innerHTML += `
+            container.innerHTML += `
         <div class="house-card" data-type="${house.type || 'house'}" style="display: flex; flex-direction: column; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff;">
             <img src="assets/images/${house.image_url}" alt="${house.title}" class="house-img" style="width: 100%; height: 200px; object-fit: cover;">
             <div class="info" style="padding: 15px; display: block;">
@@ -109,27 +111,27 @@ async function fetchListings() {
             </div>
         </div>
     `;
-});
+        });
     } catch (error) {
         console.error("Listing Error:", error);
     }
 }
 
 // 2. Handle Page Load Logic
-window.onload = function() {
+window.onload = function () {
     const loggedUser = localStorage.getItem('username');
     const userProfile = document.getElementById('user-profile-header');
     const displayName = document.getElementById('display-name');
 
     if (loggedUser) {
-        if(userProfile) userProfile.style.display = "flex";
-        if(displayName) displayName.innerText ="Hi, " + loggedUser;
-        
-        const oldBtn = document.querySelector('.book-now-btn'); 
-        if(oldBtn) oldBtn.style.display = "none";
+        if (userProfile) userProfile.style.display = "flex";
+        if (displayName) displayName.innerText = "Hi, " + loggedUser;
+
+        const oldBtn = document.querySelector('.book-now-btn');
+        if (oldBtn) oldBtn.style.display = "none";
     }
 
-    fetchListings(); 
+    fetchListings();
 };
 
 // 3. Logout
@@ -159,7 +161,7 @@ function closeModal() {
     document.getElementById('contactModal').style.display = "none";
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     let modal = this.document.getElementById('contactModal');
     if (event.target == modal) {
         closeModal();
@@ -168,9 +170,9 @@ window.onclick = function(event) {
 
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
-    contactForm.onsubmit = async function(e) {
+    contactForm.onsubmit = async function (e) {
         e.preventDefault();
-        
+
         // 1. Get the data from the modal
         const messageText = document.getElementById('user-message').value;
         const houseTitle = document.getElementById('modal-house-title').innerText.replace("Inquiry: ", "");
@@ -187,13 +189,13 @@ if (contactForm) {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.text();
             console.log("PHP Output:", result);
             if (result.includes("Success")) {
                 alert("Message sent to the owner!");
                 document.getElementById('contactModal').style.display = "none";
-                contactForm.reset(); 
+                contactForm.reset();
             }
         } catch (error) {
             console.error("Submission Error:", error);
@@ -204,14 +206,14 @@ if (contactForm) {
 function filterType(category) {
     const container = document.getElementById('listings-container');
     const cards = document.querySelectorAll('.house-card');
-    
+
     // Ensure the container ALWAYS stays on one line
     container.style.flexWrap = 'nowrap';
     container.style.display = 'flex';
 
     cards.forEach(card => {
         const cardType = card.getAttribute('data-type');
-        
+
         // Match the category (case-insensitive)
         if (category === 'all' || (cardType && cardType.toLowerCase() === category.toLowerCase())) {
             card.style.display = "flex"; // Show matching cards
@@ -227,7 +229,7 @@ function filterType(category) {
 function scrollGrid(direction) {
     const container = document.getElementById('listings-container');
     const scrollAmount = 320; // Card width (300) + gap (20)
-    
+
     container.scrollBy({
         left: direction * scrollAmount,
         behavior: 'smooth'
@@ -235,7 +237,7 @@ function scrollGrid(direction) {
 }
 
 const container = document.getElementById('listings-container');
-if (container) { 
+if (container) {
     container.addEventListener('scroll', () => {
         const leftBtn = document.querySelector('.scroll-btn.left');
         const rightBtn = document.querySelector('.scroll-btn.right');
@@ -262,9 +264,9 @@ const msgBtn = document.getElementById('msg-btn').addEventListener('click', () =
 
 const whatsappBtn = document.getElementById('whatsapp-btn');
 if (whatsappBtn) {
-    whatsappBtn.onclick = function() {
-       const houseNameInput = document.getElementById('form-house-title');
-       const houseName = houseNameInput ? houseNameInput : "your property";
+    whatsappBtn.onclick = function () {
+        const houseNameInput = document.getElementById('form-house-title');
+        const houseName = houseNameInput ? houseNameInput : "your property";
 
         const message = `Hello! I'm interested in ${houseName}. Can I get more details?`;
         const encodedMessage = encodeURIComponent(message);
@@ -280,7 +282,7 @@ async function toggleDashboard() {
     if (dropdown.classList.contains('active')) {
         const loggedUser = localStorage.getItem('username');
         const historyList = document.getElementById('message-history-list');
-        
+
         if (loggedUser) {
             try {
                 const statsRes = await fetch(`backend/get_user_stats.php?user=${encodeURIComponent(loggedUser)}`);
@@ -292,15 +294,15 @@ async function toggleDashboard() {
                 const historyData = await historyRes.json();
 
                 if (historyData.success) {
-                    historyList.innerHTML = ''; 
-                    
+                    historyList.innerHTML = '';
+
                     if (historyData.history.length === 0) {
                         historyList.innerHTML = '<li>No inquiries yet.</li>';
                     } else {
                         historyData.history.forEach(item => {
                             const li = document.createElement('li');
                             li.className = "history-item";
-                             // Inside your forEach loop for inquiry history:
+                            // Inside your forEach loop for inquiry history:
                             li.innerHTML = `
                                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                     <a href="#">🏠 ${item.property_title} <br><small>${item.created_at}</small></a>
@@ -341,16 +343,16 @@ async function toggleDashboard() {
                 console.error("Error fetching dashboard data:", error);
             }
 
-            
+
         }
     }
 }
 
 // Close dropdown when clicking outside
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     const container = document.querySelector('.profile-nav-container');
     const dropdown = document.getElementById('dashboard-dropdown');
-    
+
     if (container && !container.contains(e.target)) {
         dropdown.classList.remove('active');
     }
@@ -364,17 +366,17 @@ async function deleteInquiry(houseTitle) {
         method: 'POST',
         body: JSON.stringify({ username: loggedUser, property_title: houseTitle })
     });
-    
+
     const result = await response.json();
     if (result.success) {
-        toggleDashboard(); 
-        toggleDashboard(); 
+        toggleDashboard();
+        toggleDashboard();
     }
 }
 
 async function toggleFavorite(houseTitle, houseImage, buttonElement) {
     const loggedUser = localStorage.getItem('username');
-    
+
     if (!loggedUser) {
         alert("Please log in to save favorites!");
         return;
@@ -392,7 +394,7 @@ async function toggleFavorite(houseTitle, houseImage, buttonElement) {
         });
 
         const data = await response.json();
-        
+
         if (data.success) {
             // Toggle the look of the heart icon
             const icon = buttonElement.querySelector('i');
@@ -419,7 +421,7 @@ async function deleteInquiry(houseTitle, btnElement) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: loggedUser, property_title: houseTitle })
         });
-        
+
         const data = await response.json();
         if (data.success) {
             // Remove the item from the UI immediately
@@ -440,10 +442,35 @@ function toggleSection(sectionId) {
     if (sectionId === 'history-section') {
         historyList.classList.toggle('active');
         // Optional: Close favorites when history opens
-        favoritesList.classList.remove('active'); 
+        favoritesList.classList.remove('active');
     } else {
         favoritesList.classList.toggle('active');
         // Optional: Close history when favorites opens
         historyList.classList.remove('active');
     }
 }
+
+function updateAuthUI() {
+    const navContainer = document.querySelector('.profile-nav-container');
+    const loggedUser = localStorage.getItem('username');
+
+    if (loggedUser) {
+        // User is logged in: Keep your existing profile structure
+        navContainer.innerHTML = `
+            <div id="user-profile-header" onclick="toggleDashboard()">
+                <div class="user-avatar">
+                    <img src="assets/images/user-line.png" alt="profile png" id="user-icon-image">
+                </div>
+                <span id="display-name">Hi, ${loggedUser}</span>
+            </div>
+        `;
+    } else {
+        // User is NOT logged in: Show the orange Login button
+        navContainer.innerHTML = `
+            <a href="login.html" class="login-nav-btn">Login</a>
+        `;
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', updateAuthUI);

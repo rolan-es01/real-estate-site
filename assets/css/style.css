@@ -21,9 +21,12 @@ header{
    
 }
 
-.profile-nav-container {
-    position: relative; /* Context for the absolute dropdown */
-    display: inline-block;
+.profile-nav-container{
+     position: relative;
+     display: inline-block;
+     align-items: center;
+     justify-content: flex-end;
+     min-width: 100px;
 }
 
 #user-profile-header {
@@ -88,7 +91,7 @@ header{
 
 #message-history-list {
     max-height: 200px;
-    overflow-y: auto; /* Add scroll if they have many inquiries */
+    overflow-y: auto; 
 }
 
 #message-history-list li small {
@@ -136,6 +139,24 @@ header{
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
+}
+
+.login-nav-btn {
+    background-color: #ff9800; 
+    color: white;
+    padding: 8px 22px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: 'Courier New', Courier, monospace; 
+    font-weight: bold;
+    font-size: 14px;
+    transition: background 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.login-nav-btn:hover {
+    background-color: #e68a00;
 }
 
 .btn-logout {
