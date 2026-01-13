@@ -32,8 +32,9 @@
             </div>
             <span id="display-name"></span>
         </div>
+    </div>
     
-        <div id="dashboard-dropdown" class="dashboard-menu">
+        <div id="dashboard-dropdown" class="dashboard-menu" onclick="event.stopPropagation()">
             <div class="menu-header">
                 <h4>Account Overview</h4>
             </div>
@@ -59,7 +60,7 @@
                 <button onclick="logout()" class="btn-logout-dropdown">Logout</button>
             </div>
         </div>
-    </div>
+
 
     </header>
 

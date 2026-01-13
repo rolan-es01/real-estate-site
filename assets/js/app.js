@@ -449,28 +449,44 @@ function toggleSection(sectionId) {
         historyList.classList.remove('active');
     }
 }
-
 function updateAuthUI() {
     const navContainer = document.querySelector('.profile-nav-container');
     const loggedUser = localStorage.getItem('username');
 
+    if (!navContainer) return;
+
     if (loggedUser) {
-        // User is logged in: Keep your existing profile structure
         navContainer.innerHTML = `
-            <div id="user-profile-header" onclick="toggleDashboard()">
+            <div id="user-profile-header" onclick="toggleDashboard()" style="cursor: pointer;">
                 <div class="user-avatar">
-                    <img src="assets/images/user-line.png" alt="profile png" id="user-icon-image">
+                    <img src="assets/images/user-line.png" alt="profile" id="user-icon-image">
                 </div>
                 <span id="display-name">Hi, ${loggedUser}</span>
             </div>
         `;
     } else {
-        // User is NOT logged in: Show the orange Login button
         navContainer.innerHTML = `
-            <a href="login.html" class="login-nav-btn">Login</a>
+            <div class="auth-buttons">
+                <a href="register.html" class="register-nav-btn">Register</a>
+                <a href="login.html" class="login-nav-btn">Login</a>
+            </div>
         `;
     }
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', updateAuthUI);
+
+window.addEventListener('click', function(e) {
+    const dashboard = document.querySelector('.dashboard-menu');
+    const profileHeader = document.getElementById('user-profile-header');
+
+    // Check if the menu is actually open
+    if (dashboard && dashboard.classList.contains('active')) {
+        // If the click is NOT the profile icon AND NOT inside the dashboard...
+        if (!profileHeader.contains(e.target) && !dashboard.contains(e.target)) {
+            dashboard.classList.remove('active');
+            console.log("Clicked outside: Closing Dashboard");
+        }
+    }
+});

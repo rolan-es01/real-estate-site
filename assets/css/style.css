@@ -44,14 +44,14 @@ header{
 }
 
 .dashboard-menu {
-    position: absolute;
-    top: 100%; /* Sits right under the header */
-    right: 0;
+    position: fixed;
+    top: 80px; 
+    right: 20px;
     width: 250px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    display: none; /* Hidden by default */
+    display: none; 
     z-index: 1000;
     margin-top: 10px;
     color: #333;
@@ -59,14 +59,14 @@ header{
 }
 
 .dashboard-menu.active {
-    display: block;
+    display: block !important;
     animation: slideIn 0.3s ease-out;
 }
 
 .menu-header {
     background: #1a1a1a;
     padding: 15px;
-    color: #b89447; /* Your gold accent */
+    color: #b89447; 
     text-align: center;
 }
 
@@ -141,22 +141,42 @@ header{
     border-radius: 50%;
 }
 
+.auth-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
 .login-nav-btn {
-    background-color: #ff9800; 
-    color: white;
-    padding: 8px 22px;
+    color: #ff9800;
+    border: 1px solid #ff9800;
+    padding: 7px 18px;
     border-radius: 4px;
     text-decoration: none;
-    font-family: 'Courier New', Courier, monospace; 
-    font-weight: bold;
     font-size: 14px;
-    transition: background 0.3s ease;
-    border: none;
-    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
 .login-nav-btn:hover {
+    background: rgba(255, 152, 0, 0.1);
+}
+
+
+.register-nav-btn {
+    background-color: #ff9800;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.register-nav-btn:hover {
     background-color: #e68a00;
+    box-shadow: 0 4px 10px rgba(230, 138, 0, 0.3);
 }
 
 .btn-logout {
