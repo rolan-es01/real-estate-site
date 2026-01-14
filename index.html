@@ -25,15 +25,15 @@
             </nav>
         </div>
 
-    <div class="profile-nav-container">
-        <div id="user-profile-header" onclick="toggleDashboard()">
-            <div class="user-avatar">
-                <img src="assets/images/user-line.png" alt="profile png" id="user-icon-image">
+        <div class="profile-nav-container">
+            <div id="user-profile-header" onclick="toggleDashboard()">
+                <div class="user-avatar">
+                    <img src="assets/images/user-line.png" alt="profile png" id="user-icon-image">
+                </div>
+                <span id="display-name"></span>
             </div>
-            <span id="display-name"></span>
         </div>
-    </div>
-    
+
         <div id="dashboard-dropdown" class="dashboard-menu" onclick="event.stopPropagation()">
             <div class="menu-header">
                 <h4>Account Overview</h4>
@@ -45,16 +45,32 @@
                 </div>
             </div>
             <div class="menu-item-toggle" onclick="toggleSection('history-section')">
-                <i class="fas fa-history"></i> My Message History 
+                <i class="fas fa-history"></i> My Message History
             </div>
             <ul id="message-history-list" class="collapsible-content">
                 <li>Loading history...</li>
             </ul>
             <div class="menu-item-toggle" onclick="toggleSection('saved-section')">
-                <i class="fas fa-heart"></i> Saved Properties 
+                <i class="fas fa-heart"></i> Saved Properties
             </div>
             <ul id="favorites-list" class="collapsible-content">
                 <li>Loading favorites...</li>
+            </ul>
+            <div class="menu-item-toggle" onclick="toggleSection('profile-settings-section')">
+                <i class="fas fa-user-cog"></i> Profile Settings
+            </div>
+            <ul id="profile-settings-section" class="collapsible-content">
+                <li class="profile-upload-item">
+                    <div class="profile-preview-container">
+                        <img id="dashboard-profile-preview" src="./assets/images/default-user.png" alt="Profile">
+                        <label for="profile-input" class="edit-overlay"><i class="fas fa-camera"></i></label>
+                    </div>
+                    <form id="settings-profile-form">
+                        <input type="file" id="profile-input" name="profile_image" accept="image/*" hidden>
+                        <input type="text" name="display_name" placeholder="Update Name" class="settings-input">
+                        <button type="submit" class="btn-save-settings">Save Changes</button>
+                    </form>
+                </li>
             </ul>
             <div class="menu-footer">
                 <button onclick="logout()" class="btn-logout-dropdown">Logout</button>
@@ -65,7 +81,8 @@
     </header>
 
     <div class="hero-section">
-        <img src="assets/images/mike-hindle-a8Slhd4Kvxw-unsplash.jpg" alt="picture of a house for rent" class="background-image">
+        <img src="assets/images/mike-hindle-a8Slhd4Kvxw-unsplash.jpg" alt="picture of a house for rent"
+            class="background-image">
         <div class="hero-content">
             <h3>Welcome to Granville Real Estate</h3>
             <h1>Invest in your dream home today</h1>
@@ -146,7 +163,7 @@
     <!----property section----->
     <section class="properties-section">
         <h4>Properties</h4>
-    
+
         <h2>Featured Properties</h2>
         <div class="carousel-wrapper">
             <button class="scroll-btn left" onclick="scrollGrid(-1)"
@@ -155,24 +172,25 @@
             <article id="listings-container" class="property-container">
                 <!------Card-one------>
                 <div class="property-card">
-    
+
                     <div class="image-container">
-                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <img src="./assets/images/photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property"
+                            class="property-image">
                         <span class="rent">Rent</span>
                     </div>
-    
+
                     <div class="property-heading-container">
                         <h4 class="property-title">Luxury Family Home</h4>
                         <address class="property-address">New York City, CA, USA</address>
                     </div>
-    
+
                     <div class="property-specs">
                         <div>6 Bathrooms</div>
                         <div>6 Bedrooms</div>
                         <div>720 sq feet</div>
                         <div>1 garage</div>
                     </div>
-    
+
                     <hr>
                     <footer>
                         <div class="property-footer">
@@ -183,24 +201,25 @@
                 </div>
                 <!-----card-two------>
                 <div class="property-card">
-    
+
                     <div class="image-container">
-                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <img src="./assets/images/photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property"
+                            class="property-image">
                         <span class="rent">Rent</span>
                     </div>
-    
+
                     <div class="property-heading-container">
                         <h4 class="property-title">Luxury Family Home</h4>
                         <address class="property-address">New York City, CA, USA</address>
                     </div>
-    
+
                     <div class="property-specs">
                         <div>6 Bathrooms</div>
                         <div>6 Bedrooms</div>
                         <div>720 sq feet</div>
                         <div>1 garage</div>
                     </div>
-    
+
                     <hr>
                     <footer>
                         <div class="property-footer">
@@ -211,24 +230,25 @@
                 </div>
                 <!----card-three----->
                 <div class="property-card">
-    
+
                     <div class="image-container">
-                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <img src="./assets/images/photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property"
+                            class="property-image">
                         <span class="rent">Rent</span>
                     </div>
-    
+
                     <div class="property-heading-container">
                         <h4 class="property-title">Luxury Family Home</h4>
                         <address class="property-address">New York City, CA, USA</address>
                     </div>
-    
+
                     <div class="property-specs">
                         <div>6 Bathrooms</div>
                         <div>6 Bedrooms</div>
                         <div>720 sq feet</div>
                         <div>1 garage</div>
                     </div>
-    
+
                     <hr>
                     <footer>
                         <div class="property-footer">
@@ -239,24 +259,25 @@
                 </div>
                 <!---card-four------>
                 <div class="property-card">
-    
+
                     <div class="image-container">
-                        <img src="photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property" class="property-image">
+                        <img src="./assets/images/photo-1643297551340-19d8ad4f20ad.avif" alt="image of a property"
+                            class="property-image">
                         <span class="rent">Rent</span>
                     </div>
-    
+
                     <div class="property-heading-container">
                         <h4 class="property-title">Luxury Family Home</h4>
                         <address class="property-address">New York City, CA, USA</address>
                     </div>
-    
+
                     <div class="property-specs">
                         <div>6 Bathrooms</div>
                         <div>6 Bedrooms</div>
                         <div>720 sq feet</div>
                         <div>1 garage</div>
                     </div>
-    
+
                     <hr>
                     <footer>
                         <div class="property-footer">
@@ -264,10 +285,10 @@
                             <button class="book-button">View property</button>
                         </div>
                     </footer>
-    
+
                 </div>
             </article>
-    
+
             <button class="scroll-btn right" onclick="scrollGrid(1)"
                 style="position: absolute; right: 0px; z-index: 10;">&#10095;</button>
         </div>
@@ -277,7 +298,8 @@
     <section id="about" class="about-us-section">
 
         <div class="about-image-container">
-            <img src="assets/images/nastuh-abootalebi-eHD8Y1Znfpk-unsplash.jpg" alt="image of an interior" class="about-image">
+            <img src="assets/images/nastuh-abootalebi-eHD8Y1Znfpk-unsplash.jpg" alt="image of an interior"
+                class="about-image">
         </div>
 
         <div class="about-description-container">
@@ -331,10 +353,10 @@
                         </div>
                         <button class="card-button" id="call-btn">Call Now</button>
                     </div>
-                   
+
                     <div class="contact-card">
                         <div class="card-top">
-                            <div class="icon"><img src="assets/images/envelope.png" alt="image of an envelope" ></div>
+                            <div class="icon"><img src="assets/images/envelope.png" alt="image of an envelope"></div>
                             <div class="details">
                                 <h3>Message</h3>
                                 <p>080 6587 9200</p>
@@ -356,7 +378,8 @@
 
                     <div class="contact-card">
                         <div class="card-top">
-                            <div class="icon"><img src="assets/images/video-camera-alt.png" alt="png of video camera"></div>
+                            <div class="icon"><img src="assets/images/video-camera-alt.png" alt="png of video camera">
+                            </div>
                             <div class="details">
                                 <h3>Video Call</h3>
                                 <p>080 6587 9200</p>
@@ -377,21 +400,49 @@
     </section>
 
     <div id="contactModal" class="modal">
-    <div class="modal-content">
-        <span onclick="closeModal()" class="close-modal-span">&times;</span>
-        <h2 id="modal-house-title">Contact Agent</h2>
-        <p>Interested in this property, <span id="modal-user-name"></span></p>
+        <div class="modal-content">
+            <span onclick="closeModal()" class="close-modal-span">&times;</span>
+            <h2 id="modal-house-title">Contact Agent</h2>
+            <p>Interested in this property, <span id="modal-user-name"></span></p>
 
 
-        <form id="contactForm">
-            <input type="hidden" id="form-house-title">
-            <textarea id="user-message" placeholder="I am interested in thhis property. Please contact me..." required>
+            <form id="contactForm">
+                <input type="hidden" id="form-house-title">
+                <textarea id="user-message" placeholder="I am interested in thhis property. Please contact me..."
+                    required>
 
             </textarea>
-            <button type="submit" class="btn-orange">Send Message</button>
-        </form>
+                <button type="submit" class="btn-orange">Send Message</button>
+            </form>
+        </div>
     </div>
-</div>
+
+    <section class="testimonials">
+        <span class="about-us-span">Testimonials</span>
+        <h1 class="section-title">What Our Clients Say</h1>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p>"Found my dream home in Atlanta within a week. The process was seamless!"</p>
+                <h4>- Chidi K.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"The virtual tours and clear images made choosing an apartment so easy."</p>
+                <h4>- Sarah O.</h4>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">Granville<span>Estates</span></div>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+            <p>&copy; 2026 Granville Estates. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="assets/js/app.js"></script>
 </body>

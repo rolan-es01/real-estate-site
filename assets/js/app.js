@@ -100,15 +100,19 @@ async function fetchListings() {
                 <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">${house.location}</p>
                 <div style="font-size: 0.85rem; color: #888; margin-bottom: 10px;">
                     ${house.beds} Bed | ${house.baths} Bath | ${house.sqft} sqft
-                </div>
-                <p style="font-size: 1.2rem; font-weight: bold; color: #ff8c00; margin-bottom: 15px;">$${Number(house.price).toLocaleString()}</p>
-                <div class="card-buttons">
-                <button class="btn-orange" onclick="openContactModal('${house.title}')" style="width: 100%; padding: 10px; cursor: pointer;">Contact Now</button>
-                <button class="fav-btn" onclick="toggleFavorite('${house.title}', 'assets/images/${house.image}', this)">
-    <i class="far fa-heart"></i>
-</button>
-            </button>
             </div>
+                <p style="font-size: 1.2rem; font-weight: bold; color: #ff8c00; margin-bottom: 15px;">$${Number(house.price).toLocaleString()}</p>
+               <div class="card-buttons" style="display: flex; gap: 5px; margin-top: 15px;">
+                    <button class="register-nav-btn" onclick="openContactModal('${house.title}')" style="border: none; cursor: pointer;">
+                        Contact Now
+                    </button>
+                    <button class="login-nav-btn" onclick="window.location.href='property-details.html?id=${house.id}'" style="cursor: pointer;">
+                        View Details
+                    </button>
+                    <button class="fav-btn" onclick="toggleFavorite('${house.title}', 'assets/images/${house.image}', this)" style="flex: 0.5; padding: 10px; cursor: pointer;">
+                        <i class="far fa-heart"></i>
+                    </button>
+               </div>
         </div>
     `;
         });
@@ -254,19 +258,26 @@ if (container) {
 }
 
 // contact us section buttons
-const callBtn = document.getElementById('call-btn').addEventListener('click', () => {
-    window.location.href = "tel:+2348065879200";
-});
+const callBtn = document.getElementById('call-btn');
+if (callBtn) {
+    callBtn.addEventListener('click', () => {
+        window.location.href = "tel:+2348065879200";
+    });
+}
 
-const msgBtn = document.getElementById('msg-btn').addEventListener('click', () => {
-    window.location.href = "sms:+2348065879200";
-});
+const msgBtn = document.getElementById('msg-btn');
+if (msgBtn) {
+    msgBtn.addEventListener('click', () => {
+        window.location.href = "sms:+2348065879200";
+    });
+}
 
 const whatsappBtn = document.getElementById('whatsapp-btn');
 if (whatsappBtn) {
     whatsappBtn.onclick = function () {
-        const houseNameInput = document.getElementById('form-house-title');
-        const houseName = houseNameInput ? houseNameInput : "your property";
+        const titleElement = document.getElementById('prop-title');
+        const houseName = titleElement ? titleElement.innerText : "this property"
+
 
         const message = `Hello! I'm interested in ${houseName}. Can I get more details?`;
         const encodedMessage = encodeURIComponent(message);
@@ -277,8 +288,9 @@ if (whatsappBtn) {
 //user dashboard section
 async function toggleDashboard() {
     const dropdown = document.getElementById('dashboard-dropdown');
-    dropdown.classList.toggle('active');
-
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+    }
     if (dropdown.classList.contains('active')) {
         const loggedUser = localStorage.getItem('username');
         const historyList = document.getElementById('message-history-list');
@@ -353,9 +365,7 @@ window.addEventListener('click', function (e) {
     const container = document.querySelector('.profile-nav-container');
     const dropdown = document.getElementById('dashboard-dropdown');
 
-    if (container && !container.contains(e.target)) {
-        dropdown.classList.remove('active');
-    }
+
 });
 
 async function deleteInquiry(houseTitle) {
@@ -435,20 +445,30 @@ async function deleteInquiry(houseTitle, btnElement) {
 }
 
 function toggleSection(sectionId) {
-    // Find the lists
     const historyList = document.getElementById('message-history-list');
     const favoritesList = document.getElementById('favorites-list');
+    const profileSection = document.getElementById('profile-settings-section'); 
 
+    // 1. Handle History Section
     if (sectionId === 'history-section') {
         historyList.classList.toggle('active');
-        // Optional: Close favorites when history opens
         favoritesList.classList.remove('active');
-    } else {
+        if(profileSection) profileSection.classList.remove('active');
+    } 
+    // 2. Handle Favorites Section
+    else if (sectionId === 'saved-section') {
         favoritesList.classList.toggle('active');
-        // Optional: Close history when favorites opens
         historyList.classList.remove('active');
+        if(profileSection) profileSection.classList.remove('active');
+    }
+    // 3. Handle Profile Section [New Branch]
+    else if (sectionId === 'profile-settings-section') {
+        profileSection.classList.toggle('active');
+        historyList.classList.remove('active');
+        favoritesList.classList.remove('active');
     }
 }
+
 function updateAuthUI() {
     const navContainer = document.querySelector('.profile-nav-container');
     const loggedUser = localStorage.getItem('username');
@@ -490,3 +510,40 @@ window.addEventListener('click', function(e) {
         }
     }
 });
+
+const urlParams = new URLSearchParams(window.location.search);
+const propertyId = urlParams.get('id');
+
+if (propertyId) {
+    // Correct path to your backend folder
+    fetch(`backend/get_property_details.php?id=${propertyId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('prop-title').innerText = "Property Not Found";
+            } else {
+                // Fills in the data and removes the 'Loading...' state
+                document.getElementById('prop-title').innerText = data.title;
+                document.getElementById('prop-price').innerText = `$${Number(data.price).toLocaleString()}`;
+                
+                // Use image_url to match your home page loop
+                document.getElementById('main-hero-image').src = `./assets/images/${data.image_url}`;
+                
+                document.getElementById('prop-beds').innerText = data.beds || '0';
+                document.getElementById('prop-baths').innerText = data.baths || '0';
+            }
+            const thumbnails = document.querySelectorAll('.thumb');
+            const mainHero = document.getElementById('main-hero-image');
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function () {
+                    mainHero.src = this.src;
+                });
+            });
+
+        })
+        .catch(err => {
+            console.error("Fetch error:", err);
+            document.getElementById('prop-title').innerText = "Server Error";
+        });
+}

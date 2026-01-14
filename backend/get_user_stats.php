@@ -10,15 +10,29 @@ if (empty($username)) {
     exit;
 }
 
-$query = "SELECT COUNT(*) as total FROM messages WHERE username = ?";
+// Use a subquery to get message count from 'messages' and profile pic from 'users'
+$query = "SELECT 
+            (SELECT COUNT(*) FROM messages WHERE username = ?) as total, 
+            profile_pic 
+          FROM users WHERE username = ?";
+
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $username);
+$stmt->bind_param("ss", $username, $username); // 'ss' for two strings
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_assoc();
 
-echo json_encode([
-    'success' => true,
-    'inquiry_count' => $data['total']
-]);
+// Send back the data for the dashboard
+if ($data) {
+    echo json_encode([
+        'success' => true,
+        'inquiry_count' => $data['total'],
+        'profile_pic' => !empty($data['profile_pic']) ? $data['profile_pic'] : 'default-user.png'
+    ]);
+} else {
+    echo json_encode([
+        'success' => false,
+        'message' => 'User not found'
+    ]);
+}
 ?>
