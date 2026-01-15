@@ -28,8 +28,13 @@ async function loginUser() {
         const result = await response.json();
 
         if (result.status === "success") {
-            // saving the username to show on index.html
-            localStorage.setItem('username', userField);
+            localStorage.clear();
+            localStorage.setItem('username', result.username);
+            const nameForHeader = result.display_name ? result.display_name : result.username;
+            localStorage.setItem('display_name', nameForHeader);
+
+            localStorage.setItem('profile_pic', result.profile_pic);
+
             window.location.href = "index.html";
         } else {
             messageDisplay.innerText = result.message;
@@ -122,25 +127,44 @@ async function fetchListings() {
 }
 
 // 2. Handle Page Load Logic
+
 window.onload = function () {
     const loggedUser = localStorage.getItem('username');
-    const userProfile = document.getElementById('user-profile-header');
-    const displayName = document.getElementById('display-name');
+    const displayName = localStorage.getItem('display_name');
+    const userPic = localStorage.getItem('profile_pic');
+    console.log("Current userPic value in storage:", userPic);
 
-    if (loggedUser) {
-        if (userProfile) userProfile.style.display = "flex";
-        if (displayName) displayName.innerText = "Hi, " + loggedUser;
+    const displaySpan = document.getElementById('display-name');
+    const headerImg = document.querySelector('#user-profile-header img');
 
-        const oldBtn = document.querySelector('.book-now-btn');
-        if (oldBtn) oldBtn.style.display = "none";
+    // Only show name if it's not the actual string "undefined" or null
+    let finalName = "User";
+    if (displayName && displayName !== "undefined" && displayName !== "null") {
+        finalName = displayName;
+    } else if (loggedUser) {
+        finalName = loggedUser;
     }
 
-    fetchListings();
-};
+    if (displaySpan) {
+        displaySpan.innerText = "Hi, " + finalName;
+    }
+
+    if (headerImg) {
+    if (userPic && userPic !== "" && userPic !== "null" && userPic !== "undefined") {
+        headerImg.src = "assets/images/profiles/" + userPic;
+    } else {
+        headerImg.src = "assets/images/profiles/default-user.jpeg";
+    }
+        const oldBtn = document.querySelector('.book-now-btn');
+        if (oldBtn) oldBtn.style.display = "none";
+
+        fetchListings();
+    }
+}
 
 // 3. Logout
 function logout() {
-    localStorage.removeItem('username');
+    localStorage.clear();
     window.location.href = "login.html";
 }
 
@@ -314,7 +338,7 @@ async function toggleDashboard() {
                         historyData.history.forEach(item => {
                             const li = document.createElement('li');
                             li.className = "history-item";
-                            // Inside your forEach loop for inquiry history:
+
                             li.innerHTML = `
                                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                     <a href="#">🏠 ${item.property_title} <br><small>${item.created_at}</small></a>
@@ -327,7 +351,7 @@ async function toggleDashboard() {
                         });
                     }
                 }
-                // 3. Fetch Favorites (Inject this right after your history loop)
+                // 3. Fetch Favorites 
                 const favRes = await fetch(`backend/get_favorites.php?user=${encodeURIComponent(loggedUser)}`);
                 const favData = await favRes.json();
                 const favList = document.getElementById('favorites-list');
@@ -447,19 +471,19 @@ async function deleteInquiry(houseTitle, btnElement) {
 function toggleSection(sectionId) {
     const historyList = document.getElementById('message-history-list');
     const favoritesList = document.getElementById('favorites-list');
-    const profileSection = document.getElementById('profile-settings-section'); 
+    const profileSection = document.getElementById('profile-settings-section');
 
     // 1. Handle History Section
     if (sectionId === 'history-section') {
         historyList.classList.toggle('active');
         favoritesList.classList.remove('active');
-        if(profileSection) profileSection.classList.remove('active');
-    } 
+        if (profileSection) profileSection.classList.remove('active');
+    }
     // 2. Handle Favorites Section
     else if (sectionId === 'saved-section') {
         favoritesList.classList.toggle('active');
         historyList.classList.remove('active');
-        if(profileSection) profileSection.classList.remove('active');
+        if (profileSection) profileSection.classList.remove('active');
     }
     // 3. Handle Profile Section [New Branch]
     else if (sectionId === 'profile-settings-section') {
@@ -497,7 +521,7 @@ function updateAuthUI() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', updateAuthUI);
 
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     const dashboard = document.querySelector('.dashboard-menu');
     const profileHeader = document.getElementById('user-profile-header');
 
@@ -515,7 +539,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const propertyId = urlParams.get('id');
 
 if (propertyId) {
-    // Correct path to your backend folder
+
     fetch(`backend/get_property_details.php?id=${propertyId}`)
         .then(res => res.json())
         .then(data => {
@@ -525,10 +549,10 @@ if (propertyId) {
                 // Fills in the data and removes the 'Loading...' state
                 document.getElementById('prop-title').innerText = data.title;
                 document.getElementById('prop-price').innerText = `$${Number(data.price).toLocaleString()}`;
-                
-                // Use image_url to match your home page loop
+
+
                 document.getElementById('main-hero-image').src = `./assets/images/${data.image_url}`;
-                
+
                 document.getElementById('prop-beds').innerText = data.beds || '0';
                 document.getElementById('prop-baths').innerText = data.baths || '0';
             }
@@ -546,4 +570,87 @@ if (propertyId) {
             console.error("Fetch error:", err);
             document.getElementById('prop-title').innerText = "Server Error";
         });
+}
+
+// --- PROFILE IMAGE PREVIEW LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const dashboardInput = document.getElementById('profile-input');
+    const dashboardPreview = document.getElementById('dashboard-profile-preview');
+
+    if (dashboardInput && dashboardPreview) {
+        dashboardInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+
+                reader.onload = function (e) {
+                    dashboardPreview.src = e.target.result;
+                    console.log("Preview updated successfully!");
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    } else {
+        console.error("Profile elements not found. Check if IDs match your HTML.");
+    }
+});
+
+const settingsForm = document.getElementById('settings-profile-form');
+
+if (settingsForm) {
+    settingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // 1. Grab the name AT THE MOMENT of clicking Save
+        const nameSpan = document.getElementById('display-name');
+        let currentUsername = "";
+
+        if (nameSpan) {
+            // Cleans "Hi, somtee" into "somtee"
+            currentUsername = nameSpan.innerText.replace('Hi, ', '').trim();
+        }
+
+        // 2. Emergency Backup: If the span is empty, check the URL
+        if (!currentUsername) {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentUsername = urlParams.get('display_name') || urlParams.get('user');
+        }
+
+        // 3. Final Check
+        if (!currentUsername) {
+            alert("Error: Could not identify user. Try refreshing the page.");
+            return;
+        }
+
+        const formData = new FormData(settingsForm);
+        formData.append('username', currentUsername); // Matches PHP $username
+
+        try {
+            const response = await fetch('backend/upload_profile.php', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                // 1. Update the profile picture path
+                localStorage.setItem('profile_pic', result.image_path);
+
+                // 2. ONLY update 'display_name'. 
+                // DO NOT touch 'username' here—this keeps your inquiries safe!
+                if (result.name_to_show) {
+                    localStorage.setItem('display_name', result.name_to_show);
+                }
+
+                alert("Profile Updated Successfully!");
+                location.reload();
+            } else {
+                alert("Upload failed: " + result.message);
+            }
+        } catch (error) {
+            console.error("Critical upload error:", error);
+        }
+    });
 }
